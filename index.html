@@ -320,6 +320,7 @@ Zimbabwe,Harare,-17.825166,31.03351
 
         var item = data[Math.floor(Math.random() * data.length)];
 
+        document.title = item.Capital  + ', ' + item.Country;
         console.log(item);
 
         var mymap = L.map('mapid').setView([item.Latitude, item.Longitude], 7);
