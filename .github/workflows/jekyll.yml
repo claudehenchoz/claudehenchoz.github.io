@@ -34,7 +34,7 @@ jobs:
           echo "<!DOCTYPE html><html lang='en'><body>" > build/index.html
           cd build
           for filename in *.epub; do
-            echo "<a href='$filename'>$filename</a>" >> ../index.html
+            echo "<a href='$filename'>$filename</a>" >> index.html
           done
           cd ..
           echo "</body></html>" >> build/index.html
