@@ -23,8 +23,10 @@ jobs:
           mkdir build
           for filename in recipes/*.recipe; do
             ebook-convert "$filename" "build/$(basename "$filename" .recipe).epub" --extra-css ".calibre_navbar {display:none;}" --smarten-punctuation
-            ./kepubify-linux-64bit "build/$(basename "$filename" .recipe).epub"
-            rm "build/$(basename "$filename" .recipe).epub"
+            cd build
+            ../kepubify-linux-64bit "$(basename "$filename" .recipe).epub"
+            rm "$(basename "$filename" .recipe).epub"
+            cd ..
           done
 
       - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
