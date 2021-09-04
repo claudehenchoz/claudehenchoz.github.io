@@ -13,15 +13,15 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
 
-      - name: Install Calibre
+      - name: Install Calibre ⏳
         run: sudo apt-get install calibre --no-install-recommends
 
-      - name: Install Kepubify
+      - name: Install Kepubify ⏳
         run: |
           wget https://github.com/pgaskin/kepubify/releases/latest/download/kepubify-linux-64bit
           chmod +x kepubify-linux-64bit
 
-      - name: Install and Build 🔧 # This example project is built using npm and outputs the result to the 'build' folder. Replace with the commands required to build your project, or remove this step entirely if your site is pre-built.
+      - name: Generate Kepubs 📚
         run: |
           mkdir build
           for filename in recipes/*.recipe; do
@@ -32,12 +32,12 @@ jobs:
             cd ..
           done
 
-      - name: Generate index.html
+      - name: Generate index.html 📰
         run: |
           echo "<!DOCTYPE html><html lang='en'><body>" > build/index.html
           cd build
           for filename in *.epub; do
-            echo "<a href='$filename'>$filename</a>" >> index.html
+            echo "<a href='$filename'>$filename</a><br/>" >> index.html
           done
           cd ..
           echo "</body></html>" >> build/index.html
