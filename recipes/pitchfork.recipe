@@ -1,0 +1,65 @@
+#!/usr/bin/env python2
+# vim:fileencoding=utf-8
+from __future__ import unicode_literals, division, absolute_import, print_function
+from calibre.web.feeds.news import BasicNewsRecipe
+import re
+
+
+class PitchforkBestNewMusic(BasicNewsRecipe):
+  
+    title = 'Pitchfork - Best New Music'
+    oldest_article = 120
+    max_articles_per_feed = 20
+    auto_cleanup = False
+    no_stylesheets = True
+
+    #simultaneous_downloads = 1
+    #delay = 5
+
+    extra_css = '.heading-h4 { font-weight: bold; }'
+
+    remove_tags_after = [dict(name='hr')]
+
+    keep_only_tags = [
+                      dict(id=['site-content',]),
+                      dict(name='article', attrs={'class':'article main-content'}),
+                     ]
+    remove_tags = [
+                   dict(name='div', attrs={'class':'article-meta'}),
+                   dict(name='div', attrs={'class':'review-related'}),
+                   dict(name='div', attrs={'class':'video-player'}),
+                   dict(name='div', attrs={'class':'single-album-tombstone__meta'}),
+                   dict(name='div', attrs={'class':'bnm'}),
+                   dict(name='div', attrs={'class':'interaction'}),
+                   dict(name='div', attrs={'class':'label'}),
+                   dict(name='div', attrs={'class':'spread'}),
+                   dict(name='div', attrs={'class':'review-detail__featured-tracks'}),
+                   dict(name='div', attrs={'class':'social-icons'}),
+                   dict(name='p', attrs={'class':'bnm-txt'}),
+                   dict(name='a', attrs={'class':'end-mark-container'}),
+                   dict(name='hr'),
+                   dict(name='aside'),
+                   dict(name='figure', attrs={'data-testid':'IframeEmbed'}),
+                   ]
+
+    feeds = [
+        ('Features', 'https://pitchfork.com/rss/features/'),
+        ('Best New Albums', 'https://pitchfork.com/rss/reviews/best/albums/'),
+        ('Best New Tracks', 'https://pitchfork.com/rss/reviews/best/tracks/'),
+    ]
+
+    def get_browser(self):
+        br = BasicNewsRecipe.get_browser(self, user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:76.0) Gecko/20100101 Firefox/76.0')
+        #br.addheaders = [('Cookie',tagisession.strip())]
+        return br
+
+    def preprocess_html(self, soup):
+
+        # Replace lazy-loading images
+        for h2 in soup.findAll('hgroup.single-album-tombstone__headings h2'):
+            h2.string = h2.text
+
+        return soup
+
+    def get_cover_url(self):
+        return 'https://cdn.pitchfork.com/assets/misc/hp-og-image.jpg'
