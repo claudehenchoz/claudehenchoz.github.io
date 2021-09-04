@@ -1,0 +1,57 @@
+#!/usr/bin/env python2
+# vim:fileencoding=utf-8
+from __future__ import unicode_literals, division, absolute_import, print_function
+from calibre.web.feeds.news import BasicNewsRecipe
+
+from collections import defaultdict
+
+
+class RockPaperShotgun(BasicNewsRecipe):
+    title = 'Rock Paper Shotgun'
+    oldest_article = 7
+    max_articles_per_feed = 20
+    auto_cleanup = False
+    no_stylesheets = True
+    keep_only_tags = [
+        dict(name='h1', attrs={'class':'title'}),
+        dict(name='span', attrs={'class':'strapline'}),
+        dict(name='div', attrs={'class':'headline_asset'}),
+        dict(name='div', attrs={'class':'article_body'}),
+    ]
+    remove_tags = []
+    
+    def parse_index(self):
+        index_urls = ('https://www.rockpapershotgun.com/latest',
+                      'https://www.rockpapershotgun.com/latest?page=2',
+                      'https://www.rockpapershotgun.com/latest?page=3',
+                      'https://www.rockpapershotgun.com/latest?page=4',
+                      'https://www.rockpapershotgun.com/latest?page=5',
+                      'https://www.rockpapershotgun.com/latest?page=6',
+                      'https://www.rockpapershotgun.com/latest?page=7',
+                      'https://www.rockpapershotgun.com/latest?page=8',
+                      'https://www.rockpapershotgun.com/latest?page=9',
+                      'https://www.rockpapershotgun.com/latest?page=10')
+
+        feeds = defaultdict(list)
+
+        for index_url in index_urls:
+            soup = self.index_to_soup(index_url)
+            for articlesoup in soup.find_all('article', class_="summary"):
+                section = articlesoup.attrs['data-article-type'].strip().capitalize()
+                title = articlesoup.find('a')['title']
+                url = articlesoup.find('a')['href']
+                description = articlesoup.find('div', class_="excerpt").text.strip()
+                feeds[section].append({'title': title, 'url': url, 'description': description})
+        
+        ans = []
+        for sec in ('News','Features','Reviews','Guides','Deals'):
+            try:
+                articles = feeds[sec]
+                if articles:
+                    ans.append((sec, articles))
+            except:
+                pass
+        return ans
+
+    def get_cover_url(self):
+        return 'https://assets2.rockpapershotgun.com/0275_rockpapershotgun-logo.svg'
