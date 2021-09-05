@@ -27,7 +27,7 @@ jobs:
           for filename in recipes/*.recipe; do
             ebook-convert "$filename" "build/$(basename "$filename" .recipe).epub" --extra-css ".calibre_navbar {display:none;}" --smarten-punctuation
             cd build
-            ../kepubify-linux-64bit "$(basename "$filename" .recipe).epub"
+            ../kepubify-linux-64bit --inplace "$(basename "$filename" .recipe).epub"
             rm "$(basename "$filename" .recipe).epub"
             cd ..
           done
