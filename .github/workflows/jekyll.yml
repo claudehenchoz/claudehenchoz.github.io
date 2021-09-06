@@ -34,10 +34,10 @@ jobs:
 
       - name: Generate index.html 📰
         run: |
-          echo "<!DOCTYPE html><html lang='en'><body>" > build/index.html
+          echo "<!DOCTYPE html><html lang='en'><head><style> a { text-decoration: none; } </style></head><body>" > build/index.html
           cd build
           for filename in *.epub; do
-            echo "<h1><a href='$filename'>$filename</a></h1>" >> index.html
+            echo "<h1><a href='$filename'>📰 $filename</a></h1>" >> index.html
           done
           cd ..
           echo "</body></html>" >> build/index.html
