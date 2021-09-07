@@ -94,7 +94,8 @@ class WikiPage(BasicNewsRecipe):
 
     def parse_index(self):
 
-        urls = []  # REPLACE_ME_URLS
+        urls = os.environ['WIKIURLS'].split(",") # Added to work in CI/CD
+        #urls = []  # REPLACE_ME_URLS
         self.seen_languages = Counter()
         if not urls:
             # Testing
