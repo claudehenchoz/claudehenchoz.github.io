@@ -53,6 +53,10 @@ class WikiPage(BasicNewsRecipe):
         dict(name='table', attrs={'class': 'infobox'}),
         dict(name='table', attrs={'class': 'metadata plainlinks mbox-small'}),
         dict(name='table', attrs={'class': 'metadata mbox-small plainlinks'}),
+        dict(name='div', attrs={'class': 'noprint'}),
+        dict(name='a', attrs={'class': 'mw-jump-link'}),
+        dict(name='div', attrs={'class': 'reflist'}),
+        dict(name='span', attrs={'id': 'References'}),
     ]
 
     def parse_book_page(self, url):
@@ -94,7 +98,14 @@ class WikiPage(BasicNewsRecipe):
 
     def parse_index(self):
 
-        urls = os.environ['WIKIURLS'].split(",") # Added to work in CI/CD
+        urls = []
+        soup = self.index_to_soup('https://en.wikipedia.org/wiki/Main_Page')
+        for itn_section in soup.find_all('div', id="mp-itn"):
+            for article in itn_section.find_all('a'):
+                urls.append(article['href'])
+
+        urls = ['https://en.wikipedia.org' + item for item in urls if item not in ['/wiki/Portal:Current_events','/wiki/Deaths_in_2021','/wiki/Wikipedia:In_the_news/Candidates'] and 'File:' not in item]
+
         #urls = []  # REPLACE_ME_URLS
         self.seen_languages = Counter()
         if not urls:
