@@ -56,6 +56,7 @@ class WikiPage(BasicNewsRecipe):
         dict(name='div', attrs={'class': 'noprint'}),
         dict(name='a', attrs={'class': 'mw-jump-link'}),
         dict(name='div', attrs={'class': 'reflist'}),
+        dict(name='div', attrs={'class': 'navbox'}),
         dict(name='span', attrs={'id': 'References'}),
     ]
 
