@@ -9,14 +9,13 @@ on:
 jobs:
   fetch-and-publish-news:
     runs-on: ubuntu-latest
-    container: schreckgestalt/calibre-alpine:latest
 
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
 
-      # - name: Install Calibre ⏳
-      #   run: sudo apt-get install calibre --no-install-recommends
+      - name: Install Calibre ⏳
+        run: sudo apt-get install calibre --no-install-recommends
 
       - name: Install Kepubify ⏳
         run: |
