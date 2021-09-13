@@ -35,7 +35,7 @@ jobs:
         run: |
           cd build
           for filename in *.epub; do
-            kepubify-linux-64bit --inplace "$filename.epub" &
+            kepubify-linux-64bit --inplace "$filename" &
           done
           wait
           cd ..
