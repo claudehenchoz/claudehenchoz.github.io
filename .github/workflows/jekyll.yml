@@ -23,16 +23,22 @@ jobs:
       #     wget https://github.com/pgaskin/kepubify/releases/latest/download/kepubify-linux-64bit
       #     chmod +x kepubify-linux-64bit
 
-      - name: Generate Kepubs 📚
+      - name: Get epub 📚
         run: |
           mkdir build
           for filename in recipes/*.recipe; do
-            ebook-convert "$filename" "build/$(basename "$filename" .recipe).epub" --extra-css ".calibre_navbar {display:none;}" --smarten-punctuation
-            cd build
-            kepubify-linux-64bit --inplace "$(basename "$filename" .recipe).epub"
-            rm "$(basename "$filename" .recipe).epub"
-            cd ..
+            ebook-convert "$filename" "build/$(basename "$filename" .recipe).epub" --extra-css ".calibre_navbar {display:none;}" --smarten-punctuation &
           done
+          wait
+
+      - name: Generate kepub 📚
+        run: |
+          cd build
+          for filename in *.epub; do
+            kepubify-linux-64bit --inplace "$filename.epub" &
+          done
+          wait
+          cd ..
 
       - name: Generate index.html 📰
         run: |
