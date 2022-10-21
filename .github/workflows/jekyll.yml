@@ -31,20 +31,21 @@ jobs:
           done
           wait
 
-      - name: Generate kepub 📚
-        run: |
-          cd build
-          for filename in *.epub; do
-            kepubify-linux-64bit --inplace "$filename" &
-          done
-          wait
-          cd ..
 
       - name: Generate azw3 📚
         run: |
           cd build
           for filename in *.epub; do
             ebook-convert "$filename" "$(basename "$filename" .epub).azw3" &
+          done
+          wait
+          cd ..
+
+      - name: Generate kepub 📚
+        run: |
+          cd build
+          for filename in *.epub; do
+            kepubify-linux-64bit --inplace "$filename" &
           done
           wait
           cd ..
