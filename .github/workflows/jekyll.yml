@@ -54,7 +54,7 @@ jobs:
         run: |
           echo "<!DOCTYPE html><html lang='en'><head><style> a { text-decoration: none; } </style></head><body>" > build/index.html
           cd build
-          for filename in *.{epub,azw3}; do
+          for filename in *.epub *.azw3; do
             echo "<h1><a href='$filename'>📰 $filename</a></h1>" >> index.html
           done
           cd ..
